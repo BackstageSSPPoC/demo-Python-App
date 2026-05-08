@@ -60,6 +60,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
+                def scannerHome = tool 'sonar-scanner'
                 withSonarQubeEnv('SonarQube') {
                     sh '''
                     . venv/bin/activate

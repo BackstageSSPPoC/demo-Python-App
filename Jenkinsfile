@@ -60,17 +60,19 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                def scannerHome = tool 'sonar-scanner'
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    . venv/bin/activate
-                    pip install pysonar-scanner || true
-                    sonar-scanner \
-                      -Dsonar.projectKey=${APP_NAME} \
-                      -Dsonar.sources=. \
-                      -Dsonar.language=py \
-                      -Dsonar.python.version=3
-                    '''
+                script {
+                    def scannerHome = tool 'sonar-scanner'
+
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            . venv/bin/activate
+
+                            ${scannerHome}/bin/sonar-scanner \
+                              -Dsonar.projectKey=${APP_NAME} \
+                              -Dsonar.sources=. \
+                              -Dsonar.python.version=3
+                        """
+                    }
                 }
             }
         }
